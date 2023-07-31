@@ -21,12 +21,19 @@ import { mainListItems, secondaryListItems } from './listItems';
 import Chart from './Chart';
 import Deposits from './Deposits';
 import Orders from './Orders';
+import { Button } from '@mui/material'
 
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DemoContainer, DemoItem } from '@mui/x-date-pickers/internals/demo';
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateField } from '@mui/x-date-pickers/DateField';
+import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+
+import { alpha } from '@mui/material/styles';
+import { OutlinedInput, InputAdornment } from '@mui/material';
+
+import Iconify from './iconify';
 
 
 function Copyright(props) {
@@ -91,13 +98,36 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 // TODO remove, this demo shouldn't need to reset the theme.
 const defaultTheme = createTheme();
 
+const StyledSearch = styled(OutlinedInput)(({ theme }) => ({
+  width: 272,
+  paddingTop: '10px',
+  backgroundColor: 'white',
+  transition: theme.transitions.create(['box-shadow', 'width'], {
+    easing: theme.transitions.easing.easeInOut,
+    duration: theme.transitions.duration.shorter,
+  }),
+  '&.Mui-focused': {
+    width: 320,
+  },
+  '& fieldset': {
+    borderWidth: `1px !important`,
+    borderColor: `${alpha(theme.palette.grey[500], 0.32)} !important`,
+  },
+}));
+
 export default function Dashboard() {
   const [value, setValue] = React.useState(dayjs('2022-04-17'));
+
+  const [filterName, setFilterName] = React.useState('');
 
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleFilterByName = (event) => {
+    setFilterName(event.target.value);
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -171,49 +201,39 @@ export default function Dashboard() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              {/* <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid> */}
-              {/* Recent Deposits */}
-              {/* <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid> */}
-              {/* Recent Orders */}
-              <Grid>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DateField', 'DateField']}>
+            <Grid container spacing={3}
+              style={{
+                // top: 0,
+                gap: '10px',
+              }}
+            >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={['DateField']}>
+                  <DemoItem>
                     <Paper>
-
-                      <DateField
+                      <DesktopDatePicker
                         label="Dash separator"
                         value={value}
                         onChange={(newValue) => setValue(newValue)}
                         format="DD-MM-YYYY"
                       />
                     </Paper>
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Grid>
+                  </DemoItem>
+                </DemoContainer>
+              </LocalizationProvider>
+              <StyledSearch
+                value={filterName}
+                onChange={handleFilterByName}
+                placeholder="Search user..."
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled', width: 20, height: 20 }} />
+                  </InputAdornment>
+                }
+              />
+              <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
+                Search
+              </Button>
               <Grid item xs={12}>
                 <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                   <Orders />
