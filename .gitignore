@@ -1,5 +1,5 @@
 test_newpaper3k.py
-
-*.csv
 .idea/
+venv/
+__pycache__/
 

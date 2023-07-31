@@ -171,18 +171,18 @@ NAMES = [ # 'newspapers71',
          'tbsnews',
          'thefinancialexpress']
 
-def main(browser='Chrome', headless=False, search_key="এসিআই"):
+def main(browser='Firefox', headless=False, search_key="এসিআই"):
     get_news = GetNews(browser=browser, headless=headless, search_key=search_key)
-    get_news.select_browser('Chrome')
+    get_news.select_browser('Firefox')
 
-    translate = True
+    translate = False
     news_data_df = pd.DataFrame()
     for name in NAMES[1:11]:
         news_df = get_news.extract(name, google_news=True, max_news=20, keep_content=True )
         # print(news_df)
         if translate:
             news_df = get_news.translate_news(news_df)
-        news_df['sentiment'] = get_sentiment(news_df.headline.to_list())
+            news_df['sentiment'] = get_sentiment(news_df.headline.to_list())
         news_data_df = pd.concat((news_data_df, news_df), axis=0, ignore_index=True)
         # except:
         #     news_data_df.to_csv("./data/temp1.csv", index=False)

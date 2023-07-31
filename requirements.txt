@@ -12,3 +12,4 @@ requests
 pyLDAvis
 gensim
 pandasgui
+spacy
