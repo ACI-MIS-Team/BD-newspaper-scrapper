@@ -11,4 +11,8 @@ torch==1.12.1
 requests
 pyLDAvis
 gensim
-pandasgui
+django
+djangorestframework
+django_celery_beat
+redis
+celery
